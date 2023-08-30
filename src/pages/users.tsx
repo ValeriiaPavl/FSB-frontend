@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { z } from "zod";
 import axios from "axios";
+import UserCard from "@/components/UserCard";
 
 // 'username', 'gender',
 //                   'city_of_residence_latitude',
@@ -19,7 +20,7 @@ const userValidator = z.object({
   interest_hashtags: z.string().array(),
 });
 
-type User = z.infer<typeof userValidator>;
+export type User = z.infer<typeof userValidator>;
 const userArrayValidator = z.array(userValidator);
 
 const Users = () => {
@@ -41,12 +42,11 @@ const Users = () => {
     };
     getUsers();
   }, []);
-  console.log(users);
+
   return (
-    <div>
+    <div className="users-list">
       <h1>All users</h1>
-      {users &&
-        users.map((user: User) => <p key={user.username}>{user.username}</p>)}
+      {users && users.map((user: User) => <UserCard {...user}></UserCard>)}
     </div>
   );
 };
