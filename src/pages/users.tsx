@@ -18,6 +18,7 @@ const userValidator = z.object({
   user_description: z.string(),
   user_avatar: z.string(),
   interest_hashtags: z.string().array(),
+  user_id: z.number().int(),
 });
 
 export type User = z.infer<typeof userValidator>;
@@ -29,7 +30,9 @@ const Users = () => {
   useEffect(() => {
     const getUsers = async () => {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/users/");
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/`
+        );
         const validated = userArrayValidator.safeParse(response.data);
         if (validated.success) {
           setUsers(validated.data);
