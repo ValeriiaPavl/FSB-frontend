@@ -54,3 +54,11 @@
 .user-avatar {
   height: 30vh;
 }
+
+.tag {
+  background-color: thistle;
+  border-radius: 5px;
+  display: inline-block;
+  padding: 1px;
+  margin: 3px;
+}
