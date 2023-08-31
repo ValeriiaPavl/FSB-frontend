@@ -9,7 +9,7 @@ import UserCard from "@/components/UserCard";
 //                   'year_of_birth', 'user_avatar',
 //                   'user_description', 'interest_hashtags'
 
-const userValidator = z.object({
+export const userValidator = z.object({
   username: z.string(),
   gender: z.string().max(20),
   city_of_residence_latitude: z.string(),
