@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import { User, userValidator } from "../users";
+import { userValidator, likeArrayValidator } from "@/lib/validators";
+import { User, Like } from "@/lib/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
@@ -15,13 +16,21 @@ const UserPage = () => {
   const router = useRouter();
   const { user_id } = router.query;
   const [user, setUser] = useState<User | null>(null);
+  const [likes, setLikes] = useState<Like[] | null>(null);
+  const [token, setToken] = useState<String | null>(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    console.log(token);
+  }, []);
 
   useEffect(() => {
     if (user_id) {
       const getUser = async () => {
         try {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/${user_id}`
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/${user_id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
           );
           const validated = userValidator.safeParse(response.data);
           if (validated.success) {
@@ -37,12 +46,34 @@ const UserPage = () => {
     }
   }, [user_id]);
 
+  useEffect(() => {
+    const getLikes = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/likes/from`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const validated = likeArrayValidator.safeParse(response.data);
+        if (validated.success) {
+          setLikes(validated.data);
+        } else {
+          console.log(validated.error.flatten());
+        }
+      } catch (error) {
+        console.log("Something went wrong");
+      }
+    };
+    if (token !== null) {
+      getLikes();
+    }
+  }, [token]);
+
   {
-    if (user) {
+    if (user && likes) {
       return (
         <main>
           <NavWithToken />
-          <UserCard {...user} />
+          <UserCard user={user} likes={likes} />
           <DynamicMap
             city_of_residence_latitude={user.city_of_residence_latitude}
             city_of_residence_longitude={user.city_of_residence_longitude}

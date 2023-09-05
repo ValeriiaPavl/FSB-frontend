@@ -3,6 +3,13 @@ import { z } from "zod";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
+import {
+  LikeValidator,
+  userValidator,
+  userArrayValidator,
+  likeArrayValidator,
+} from "@/lib/validators";
+import { User, Like } from "@/lib/types";
 
 // 'username', 'gender',
 //                   'city_of_residence_latitude',
@@ -10,35 +17,15 @@ import NavWithToken from "@/components/NavBar";
 //                   'year_of_birth', 'user_avatar',
 //                   'user_description', 'interest_hashtags'
 
-export const userValidator = z.object({
-  username: z.string(),
-  gender: z.string().max(20),
-  city_of_residence_latitude: z.string(),
-  city_of_residence_longitude: z.string(),
-  year_of_birth: z.number().gt(1920).lt(2022),
-  user_description: z.string(),
-  user_avatar: z.string(),
-  interest_hashtags: z.string().array(),
-  user_id: z.number().int(),
-});
-
-export type User = z.infer<typeof userValidator>;
-const userArrayValidator = z.array(userValidator);
-
-export const LikeValidator = z.object({
-  id: z.number().int(),
-  like_added: z.string(),
-  from_person: z.number().int(),
-  to_person: z.number().int(),
-});
-
-export type Like = z.infer<typeof LikeValidator>;
-
-export const likeArrayValidator = z.array(LikeValidator);
-
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>(null);
   const [likes, setLikes] = useState<Like[] | null>(null);
+  const [token, setToken] = useState<String | null>(null);
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    console.log(token);
+  }, []);
 
   useEffect(() => {
     const getUsers = async () => {
@@ -63,7 +50,8 @@ const Users = () => {
     const getLikes = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/likes/from`
+          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/likes/from`,
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         const validated = likeArrayValidator.safeParse(response.data);
         if (validated.success) {
@@ -75,8 +63,10 @@ const Users = () => {
         console.log("Something went wrong");
       }
     };
-    getLikes();
-  }, []);
+    if (token !== null) {
+      getLikes();
+    }
+  }, [token]);
 
   return (
     <div className="users-list">
