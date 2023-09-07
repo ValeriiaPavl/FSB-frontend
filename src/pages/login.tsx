@@ -44,7 +44,7 @@ const UserLogin = () => {
     <main>
       <NavBar />
       <h1>User login page</h1>
-      <form className="vertical-form" onSubmit={handleSubmit(handleFormSubmit)}>
+      <form className="flex flex-col" onSubmit={handleSubmit(handleFormSubmit)}>
         <label htmlFor="username"> Enter your username</label>
         <input id="username" {...register("username")}></input>
         {errors.username && (
