@@ -1,7 +1,12 @@
 import { z } from "zod";
 export const userValidator = z.object({
   username: z.string(),
-  gender: z.string().max(20),
+  gender: z.union([
+    z.literal("male"),
+    z.literal("female"),
+    z.literal("different"),
+    z.literal("not_specified"),
+  ]),
   city_of_residence_latitude: z.string(),
   city_of_residence_longitude: z.string(),
   year_of_birth: z.number().gt(1920).lt(2022),
