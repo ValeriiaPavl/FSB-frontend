@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   --box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.1);
   --border: #a1aaa6;
@@ -74,10 +78,17 @@ map { height: 180px; }
   display: flex;
   justify-content: space-between;
   height: 15vh;
-  a:visited {
-    color: yellowgreen;
-  }
-  a:link {
-    color: wheat;
-  }
 }
+
+.nav-bar a:visited {
+  color: yellowgreen;
+}
+
+.nav-bar a:link {
+  color: wheat;
+}
+
+.like-button-image {
+  height: 5rem;
+}
+
