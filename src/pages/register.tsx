@@ -5,11 +5,9 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
-import { userValidator } from "@/lib/validators";
 import ImgUpload from "@/components/ImgUpload";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
-import MapClickHandler from "@/components/DynamicMap";
 
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
@@ -19,9 +17,11 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 const userFromFormValidator = z.object({
   username: z.string().max(100),
+  email: z.string().email(),
+  password: z.string().min(4),
+
   user_description: z.string(),
   year_of_birth: z.number().gt(1920).lt(2022),
-  email: z.string().email(),
   gender: z.union([
     z.literal("not_specified"),
     z.literal("male"),
@@ -32,17 +32,12 @@ const userFromFormValidator = z.object({
 
 type userFromForm = z.infer<typeof userFromFormValidator>;
 
-const EditProfile = () => {
+const RegisterProfile = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<userFromForm>({ resolver: zodResolver(userFromFormValidator) });
-
-  const [token, setToken] = useState<String | null>(null);
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
 
   const router = useRouter();
   const [location, setLocation] = useState<number[] | null>(null);
@@ -52,26 +47,25 @@ const EditProfile = () => {
   const handleFormSubmit = (data: userFromForm) => {
     console.log(data.username, data.gender, imageUrl, location);
 
-    const patchUser = async () => {
-      const response = await axios.patch(
-        `${backendUrl}/profile/update`,
-        {
+    const postUser = async () => {
+      const response = await axios.post(`${backendUrl}/users`, {
+        user: {
           username: data.username,
+          email: data.email,
+          password: data.password,
+        },
+        profile: {
           user_description: data.user_description,
           year_of_birth: data.year_of_birth,
           gender: data.gender,
-          city_of_residence_latitude: location[0],
-          city_of_residence_longitude: location[1],
+          city_of_residence_latitude: parseFloat(location[0].toFixed(6)),
+          city_of_residence_longitude: parseFloat(location[1].toFixed(6)),
+          user_avatar: imageUrl,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      });
       router.push("/users");
     };
-    patchUser();
+    postUser();
   };
 
   const onImageUpload = (url: string) => {
@@ -96,12 +90,17 @@ const EditProfile = () => {
   return (
     <main>
       <NavBar />
-      <h1>Edit profile page</h1>
+      <h1>Create profile page</h1>
       <form className="flex flex-col" onSubmit={handleSubmit(handleFormSubmit)}>
         <label htmlFor="username"> Enter your username</label>
         <input id="username" {...register("username")}></input>
         {errors.username && (
           <p className="error-msg">{errors.username.message}</p>
+        )}
+        <label htmlFor="password"> Enter your password</label>
+        <input id="password" {...register("password")}></input>
+        {errors.password && (
+          <p className="error-msg">{errors.password.message}</p>
         )}
         <label htmlFor="email"> Enter your email</label>
         <input id="email" {...register("email")}></input>
@@ -144,4 +143,4 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default RegisterProfile;
