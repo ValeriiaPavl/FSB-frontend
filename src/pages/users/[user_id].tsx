@@ -5,12 +5,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
 import "leaflet/dist/leaflet.css";
-import dynamic from "next/dynamic";
-import NavWithToken from "@/components/NavBar";
 
-const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
-  ssr: false,
-});
+import NavWithToken from "@/components/NavBar";
 
 const UserPage = () => {
   const router = useRouter();
@@ -73,12 +69,7 @@ const UserPage = () => {
       return (
         <main>
           <NavWithToken />
-          <UserCard user={user} likes={likes} />
-          <DynamicMap
-            city_of_residence_latitude={user.city_of_residence_latitude}
-            city_of_residence_longitude={user.city_of_residence_longitude}
-          />
-          ;
+          <UserCard user={user} likes={likes} />;
         </main>
       );
     } else {
