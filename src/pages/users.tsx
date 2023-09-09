@@ -31,7 +31,7 @@ const Users = () => {
     const getUsers = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/`
+          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users`
         );
         const validated = userArrayValidator.safeParse(response.data);
         if (validated.success) {
@@ -67,6 +67,8 @@ const Users = () => {
       getLikes();
     }
   }, [token]);
+
+  console.log(users);
 
   return (
     <div className="users-list">
