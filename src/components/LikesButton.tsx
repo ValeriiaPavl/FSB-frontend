@@ -16,9 +16,9 @@ const LikeButtonPropsValidator = z.object({
 type LikeButtonProps = z.infer<typeof LikeButtonPropsValidator>;
 
 const LikeButton = ({ user, likes }: LikeButtonProps) => {
-  const liked = likes
-    .map((like: Like) => like.to_person)
-    .includes(user.user_id);
+  // const liked = likes
+  //   .map((like: Like) => like.to_person)
+  //   .includes(user.user_id);
   const [token, setToken] = useState<String | null>(null);
 
   const [likeState, setState] = useState<boolean>(
@@ -61,7 +61,9 @@ const LikeButton = ({ user, likes }: LikeButtonProps) => {
         <div>
           <form className="like-form" onSubmit={handleLikeSubmit}>
             <img src="/heart.svg" className="like-button-image" />
-            <Button type="submit">Like user</Button>
+            <Button variant="destructive" type="submit">
+              Like user
+            </Button>
           </form>
         </div>
       )}

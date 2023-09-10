@@ -7,6 +7,8 @@ import { Like } from "@/lib/types";
 import LikeButton from "./LikesButton";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "./ui/badge";
 
 const frontendUrl = process.env.NEXT_PUBLIC_REACT_APP_FRONTEND_URL;
 
@@ -53,7 +55,10 @@ const UserCard = ({ user, likes }: UserCardProps) => {
 
   return (
     <div key={`${user.user_id}_user_card`} className="user-card">
-      <img className="user-avatar-small" src={user.user_avatar} />
+      <Avatar>
+        <AvatarImage src={user.user_avatar} />
+        <AvatarFallback>CN</AvatarFallback>
+      </Avatar>
       <div className="user-info">
         <p>
           Name:
