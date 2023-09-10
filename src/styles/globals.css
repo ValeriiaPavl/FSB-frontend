@@ -3,92 +3,94 @@
 @tailwind utilities;
 
 :root {
-  --box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.1);
-  --border: #a1aaa6;
-}
+    --box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.1);
+    --border: #a1aaa6;
+  }
+  
+  
+  .users-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .user-card {
+    display: flex;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 30vh;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .user-card:hover {
+    display: flex;
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    width: 100%;
+    height: 30vh;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: 0px 7px 28px 0px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+  }
+  
+  .user-card:active {
+    display: flex;
+    background: #FFF;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.10);
+    width: 100%;
+    height: 30vh;
+    border-radius: 30px;
+    background: #FFF;
+    box-shadow: var(--box-shadow);
+    transform: translateY(-2px);
+  }
+  
+  /* .user-avatar {
+    height: 30vh;
+  } */
+  
+  .tag {
+    background-color: thistle;
+    border-radius: 5px;
+    display: inline-block;
+    padding: 1px;
+    margin: 3px;
+  }
+  
+  map { height: 180px; }
+  
+  .nav-bar {
+    background-color: #124d6a;
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding: 20px 20px 20px 40px;
+    color: wheat;
+    display: flex;
+    justify-content: space-between;
+    height: 15vh;
+  }
+  
+  .nav-bar a:visited {
+    color: yellowgreen;
+  }
+  
+  .nav-bar a:link {
+    color: wheat;
+  }
+  
+  .like-button-image {
+    height: 5rem;
+  }
+  
+  
 
-
-.users-list {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-.user-card {
-  display: flex;
-  /* grid-column: span 4; */
-  background: #fff;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  height: 30vh;
-  border-radius: 30px;
-  background: #FFF;
-  box-shadow: var(--box-shadow);
-}
-
-.user-card:hover {
-  display: flex;
-  background: #FFF;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  width: 100%;
-  height: 30vh;
-  border-radius: 30px;
-  background: #FFF;
-  box-shadow: 0px 7px 28px 0px rgba(0, 0, 0, 0.2);
-  transform: translateY(-4px);
-}
-
-.user-card:active {
-  display: flex;
-  background: #FFF;
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  box-shadow: 0px 7px 24px 0px rgba(0, 0, 0, 0.10);
-  width: 100%;
-  height: 30vh;
-  border-radius: 30px;
-  background: #FFF;
-  box-shadow: var(--box-shadow);
-  transform: translateY(-2px);
-}
-
-.user-avatar {
-  height: 30vh;
-}
-
-.tag {
-  background-color: thistle;
-  border-radius: 5px;
-  display: inline-block;
-  padding: 1px;
-  margin: 3px;
-}
-
-map { height: 180px; }
-
-.nav-bar {
-  background-color: #124d6a;
-  margin-top: 0;
-  margin-bottom: 40px;
-  padding: 20px 20px 20px 40px;
-  color: wheat;
-  display: flex;
-  justify-content: space-between;
-  height: 15vh;
-}
-
-.nav-bar a:visited {
-  color: yellowgreen;
-}
-
-.nav-bar a:link {
-  color: wheat;
-}
-
-.like-button-image {
-  height: 5rem;
-}
 
