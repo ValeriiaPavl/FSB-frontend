@@ -2,8 +2,7 @@ import Tag from "@/components/Tag";
 import { TagType } from "@/components/Tag";
 import Link from "next/link";
 import { z } from "zod";
-import { userValidator, likeArrayValidator } from "@/lib/validators";
-import { Like } from "@/lib/types";
+import { userValidator } from "@/lib/validators";
 import LikeButton from "./LikesButton";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -14,18 +13,12 @@ const frontendUrl = process.env.NEXT_PUBLIC_REACT_APP_FRONTEND_URL;
 
 const UserCardPropsValidator = z.object({
   user: userValidator,
-  likes: likeArrayValidator,
 });
 
 type UserCardProps = z.infer<typeof UserCardPropsValidator>;
 
-const UserCard = ({ user, likes }: UserCardProps) => {
+const UserCard = ({ user }: UserCardProps) => {
   const [placeName, setPlace] = useState<string>("");
-
-  if (likes) {
-    const likesTo = likes.map((like: Like) => like.to_person);
-    console.log(likesTo);
-  }
 
   useEffect(() => {
     const reverseGeocode = async (latitude: number, longitude: number) => {
@@ -43,7 +36,7 @@ const UserCard = ({ user, likes }: UserCardProps) => {
           console.log("Geocoding data not found");
         }
       } catch (error) {
-        console.error("Error during reverse geocoding:", error);
+        console.log("Error during reverse geocoding:", error);
         return "Location not found";
       }
     };
@@ -57,7 +50,7 @@ const UserCard = ({ user, likes }: UserCardProps) => {
     <div key={`${user.user_id}_user_card`} className="user-card">
       <Avatar>
         <AvatarImage src={user.user_avatar} />
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarFallback>{user.username}</AvatarFallback>
       </Avatar>
       <div className="user-info">
         <p>
@@ -70,7 +63,7 @@ const UserCard = ({ user, likes }: UserCardProps) => {
         <p>Year of birth: {user.year_of_birth}</p>
         <p>User description: {user.user_description}</p>
         <p>Location: {placeName} </p>
-        <LikeButton user={user} likes={likes}></LikeButton>
+        <LikeButton user={user}></LikeButton>
 
         <div>
           {user.interest_hashtags &&

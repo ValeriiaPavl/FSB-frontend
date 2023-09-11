@@ -14,15 +14,8 @@ export const userValidator = z.object({
   user_avatar: z.string(),
   interest_hashtags: z.string().array(),
   user_id: z.number().int(),
+  distance: z.number(),
+  liked: z.boolean(),
 });
-
-export const LikeValidator = z.object({
-  id: z.number().int(),
-  like_added: z.string(),
-  from_person: z.number().int(),
-  to_person: z.number().int(),
-});
-
-export const likeArrayValidator = z.array(LikeValidator);
 
 export const userArrayValidator = z.array(userValidator);

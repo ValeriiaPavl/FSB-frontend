@@ -3,13 +3,8 @@ import { z } from "zod";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
-import {
-  LikeValidator,
-  userValidator,
-  userArrayValidator,
-  likeArrayValidator,
-} from "@/lib/validators";
-import { User, Like } from "@/lib/types";
+import { userArrayValidator } from "@/lib/validators";
+import { User } from "@/lib/types";
 
 // 'username', 'gender',
 //                   'city_of_residence_latitude',
@@ -19,7 +14,6 @@ import { User, Like } from "@/lib/types";
 
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>(null);
-  const [likes, setLikes] = useState<Like[] | null>(null);
   const [token, setToken] = useState<String | null>(null);
 
   useEffect(() => {
@@ -29,10 +23,17 @@ const Users = () => {
 
   useEffect(() => {
     const getUsers = async () => {
+      console.log("hello");
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users`
+          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/extended`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
+        console.log(response.data);
         const validated = userArrayValidator.safeParse(response.data);
         if (validated.success) {
           setUsers(validated.data);
@@ -40,32 +41,10 @@ const Users = () => {
           console.log(validated.error.flatten());
         }
       } catch (error) {
-        console.log("Something went wrong");
+        console.log(error);
       }
     };
     getUsers();
-  }, []);
-
-  useEffect(() => {
-    const getLikes = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/likes/from`,
-          { headers: { Authorization: `Bearer ${token}` } }
-        );
-        const validated = likeArrayValidator.safeParse(response.data);
-        if (validated.success) {
-          setLikes(validated.data);
-        } else {
-          console.log(validated.error.flatten());
-        }
-      } catch (error) {
-        console.log("Something went wrong");
-      }
-    };
-    if (token !== null) {
-      getLikes();
-    }
   }, [token]);
 
   console.log(users);
@@ -75,13 +54,8 @@ const Users = () => {
       <NavWithToken />
       <h1>All users</h1>
       {users &&
-        likes &&
         users.map((user: User) => (
-          <UserCard
-            key={`${user.user_id}_user_card`}
-            user={user}
-            likes={likes}
-          ></UserCard>
+          <UserCard key={`${user.user_id}_user_card`} user={user}></UserCard>
         ))}
     </div>
   );

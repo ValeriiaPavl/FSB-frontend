@@ -1,5 +1,4 @@
 import { Like } from "@/lib/types";
-import { likeArrayValidator } from "@/lib/validators";
 import { userValidator } from "@/lib/validators";
 import { z } from "zod";
 import { Button } from "./ui/button";
@@ -10,24 +9,13 @@ const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
 const LikeButtonPropsValidator = z.object({
   user: userValidator,
-  likes: likeArrayValidator,
 });
 
 type LikeButtonProps = z.infer<typeof LikeButtonPropsValidator>;
 
-const LikeButton = ({ user, likes }: LikeButtonProps) => {
-  // const liked = likes
-  //   .map((like: Like) => like.to_person)
-  //   .includes(user.user_id);
+const LikeButton = ({ user }: LikeButtonProps) => {
+  const [likeState, setlikeState] = useState<boolean>(user.liked);
   const [token, setToken] = useState<String | null>(null);
-
-  const [likeState, setState] = useState<boolean>(
-    likes.map((like: Like) => like.to_person).includes(user.user_id)
-  );
-
-  // useEffect(() => {
-  //   setState(likeState);
-  // }, [likes]);
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -46,7 +34,7 @@ const LikeButton = ({ user, likes }: LikeButtonProps) => {
       );
     };
     likeUser();
-    setState(true);
+    setlikeState(true);
     event.preventDefault();
   };
 
