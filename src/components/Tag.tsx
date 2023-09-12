@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Badge } from "./ui/badge";
 
 const tagValidator = z.string();
 export type TagType = z.infer<typeof tagValidator>;
@@ -9,9 +10,9 @@ export interface TagProps {
 
 const Tag = ({ tag }: TagProps) => {
   return (
-    <div className="tag">
+    <Badge className="tag">
       <p>{tag}</p>
-    </div>
+    </Badge>
   );
 };
 
