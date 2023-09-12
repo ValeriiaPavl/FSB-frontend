@@ -19,3 +19,21 @@ export const userValidator = z.object({
 });
 
 export const userArrayValidator = z.array(userValidator);
+
+export const shortUserValidator = z.object({
+  username: z.string(),
+  user_avatar: z.string(),
+  to_person_id: z.number().int(),
+  like_added: z
+    .string()
+    .datetime()
+    .transform((val) => val.split("T")[0]),
+  gender: z.union([
+    z.literal("male"),
+    z.literal("female"),
+    z.literal("different"),
+    z.literal("not_specified"),
+  ]),
+});
+
+export const shortUserArrayValidator = z.array(shortUserValidator);
