@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import NavWithToken from "@/components/NavBar";
 import { shortUser } from "@/lib/types";
 import { shortUserArrayValidator } from "@/lib/validators";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import ShortUserCard from "@/components/ShortUserCard";
 
 const ShortUserList = () => {
@@ -45,16 +46,33 @@ const ShortUserList = () => {
   console.log(users);
 
   return (
-    <div className="users-list">
+    <div>
       <NavWithToken />
-      <h1>Users that you liked</h1>
-      {users &&
-        users.map((user: shortUser) => (
-          <ShortUserCard
-            key={`${user.to_person_id}_user_card`}
-            user={user}
-          ></ShortUserCard>
-        ))}
+
+      <div className="flex flex-row justify-center">
+        <main className="flex flex-col content-center">
+          <Card className="flex flex-row justify-center">
+            <div>
+              <CardHeader>
+                <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                  Users that you liked
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="flex flex-column content-center">
+                <div className="w-auto grid grid-cols-3 gap-4 pt-2">
+                  {users &&
+                    users.map((user: shortUser) => (
+                      <ShortUserCard
+                        key={`${user.to_person_id}_user_card`}
+                        user={user}
+                      ></ShortUserCard>
+                    ))}
+                </div>
+              </CardContent>
+            </div>
+          </Card>
+        </main>
+      </div>
     </div>
   );
 };
