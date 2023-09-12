@@ -22,7 +22,7 @@ const UserPage = () => {
       const getUser = async () => {
         try {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/${user_id}`,
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/extended/${user_id}`,
             { headers: { Authorization: `Bearer ${token}` } }
           );
           const validated = userValidator.safeParse(response.data);
