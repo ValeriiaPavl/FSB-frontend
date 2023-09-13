@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { userValidator, shortUserValidator } from "./validators";
+import { userValidator, shortUserLikeToValidator } from "./validators";
 
 export type User = z.infer<typeof userValidator>;
-export type shortUser = z.infer<typeof shortUserValidator>;
+export type shortUser = z.infer<typeof shortUserLikeToValidator>;

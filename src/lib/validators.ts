@@ -20,10 +20,12 @@ export const userValidator = z.object({
 
 export const userArrayValidator = z.array(userValidator);
 
-export const shortUserValidator = z.object({
+export const shortUserLikeToValidator = z.object({
   username: z.string(),
   user_avatar: z.string(),
   to_person_id: z.number().int(),
+  from_person_id: z.number().int(),
+  email: z.string().optional(),
   like_added: z
     .string()
     .datetime()
@@ -36,4 +38,4 @@ export const shortUserValidator = z.object({
   ]),
 });
 
-export const shortUserArrayValidator = z.array(shortUserValidator);
+export const shortUserArrayValidator = z.array(shortUserLikeToValidator);
