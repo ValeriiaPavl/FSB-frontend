@@ -53,18 +53,7 @@
     box-shadow: var(--box-shadow);
     transform: translateY(-2px);
   }
-  
-  /* .user-avatar {
-    height: 30vh;
-  } */
-  
-  .tag {
-    background-color: thistle;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 1px;
-    margin: 3px;
-  }
+
   
   map { height: 180px; }
   
@@ -74,8 +63,6 @@
     margin-bottom: 40px;
     padding: 20px 20px 20px 40px;
     color: wheat;
-    display: flex;
-    justify-content: space-between;
     height: 15vh;
   }
   
