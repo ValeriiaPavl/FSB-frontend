@@ -22,7 +22,7 @@ const LikeButton = ({ user }: LikeButtonProps) => {
     console.log(token);
   }, []);
 
-  const handleLikeSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleLikeSubmit = () => {
     const likeUser = async () => {
       console.log(`${backendUrl}/likes/from`);
       const response = await axios.post(
@@ -35,24 +35,38 @@ const LikeButton = ({ user }: LikeButtonProps) => {
     };
     likeUser();
     setlikeState(true);
-    event.preventDefault();
   };
 
   return (
-    <div className="like-button">
+    <div className="like-button shrink-0">
       {likeState ? (
-        <div>
+        <div className="relative">
           <img src="/heart-fill.svg" className="like-button-image" />
-          <p>Liked</p>
+          <div className="absolute flex items-center justify-center inset-0">
+            <span className="text-white font-bold top-[-8px] relative">
+              Liked
+            </span>
+          </div>
         </div>
       ) : (
         <div>
-          <form className="like-form" onSubmit={handleLikeSubmit}>
+          {/* <form className="like-form" onSubmit={handleLikeSubmit}> */}
+          <button
+            type="button"
+            onClick={handleLikeSubmit}
+            className="relative hover:scale-110 transition ease-in duration-200"
+          >
             <img src="/heart.svg" className="like-button-image" />
-            <Button variant="destructive" type="submit">
+            <div className="absolute flex items-center justify-center inset-0">
+              <span className="text-[#ff0000] font-bold top-[-8px] relative">
+                Like
+              </span>
+            </div>
+          </button>
+          {/* <Button variant="destructive" type="submit">
               Like user
-            </Button>
-          </form>
+            </Button> */}
+          {/* </form> */}
         </div>
       )}
     </div>
