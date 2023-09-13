@@ -23,7 +23,7 @@ const NavWithToken = (props: NavWithTokenProps) => {
   };
 
   return (
-    <div className="sticky top-0">
+    <div className="sticky top-0 z-10">
       <nav className="nav-bar flex items-center">
         <div className="mx-auto container relative flex items-center justify-between content-center">
           <span className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
