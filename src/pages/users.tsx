@@ -4,12 +4,7 @@ import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
 import { userArrayValidator } from "@/lib/validators";
 import { User } from "@/lib/types";
-
-// 'username', 'gender',
-//                   'city_of_residence_latitude',
-//                   'city_of_residence_longitude',
-//                   'year_of_birth', 'user_avatar',
-//                   'user_description', 'interest_hashtags'
+import { CardTitle } from "@/components/ui/card";
 
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>(null);
@@ -51,17 +46,22 @@ const Users = () => {
   return (
     <div>
       <NavWithToken />
-      <div className="users-list">
-        <h1>All users</h1>
-        {users &&
-          users
-            .sort((a, b) => a.distance - b.distance)
-            .map((user: User) => (
-              <UserCard
-                key={`${user.user_id}_user_card`}
-                user={user}
-              ></UserCard>
-            ))}
+      <div className="flex flex-row justify-center">
+        <div className="users-list md:w-2/3">
+          <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+            All users
+          </CardTitle>
+
+          {users &&
+            users
+              .sort((a, b) => a.distance - b.distance)
+              .map((user: User) => (
+                <UserCard
+                  key={`${user.user_id}_user_card`}
+                  user={user}
+                ></UserCard>
+              ))}
+        </div>
       </div>
     </div>
   );

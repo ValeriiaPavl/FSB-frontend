@@ -7,7 +7,9 @@ import LikeButton from "./LikesButton";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "./ui/badge";
+import { Card, CardHeader, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
+import { link } from "fs";
 
 const frontendUrl = process.env.NEXT_PUBLIC_REACT_APP_FRONTEND_URL;
 
@@ -47,32 +49,54 @@ const UserCard = ({ user }: UserCardProps) => {
   }, []);
 
   return (
-    <div key={`${user.user_id}_user_card`} className="user-card">
-      <Avatar>
-        <AvatarImage src={user.user_avatar} />
-        <AvatarFallback>{user.username}</AvatarFallback>
-      </Avatar>
-      <div className="user-info">
-        <p>
-          Name:
-          <Link href={`${frontendUrl}/users/${user.user_id}`}>
-            {user.username}
-          </Link>
-        </p>
-        <p>Gender: {user.gender}</p>
-        <p>Year of birth: {user.year_of_birth}</p>
-        <p>User description: {user.user_description}</p>
-        <p>Location: {placeName} </p>
-        <LikeButton user={user}></LikeButton>
+    <Card key={`${user.user_id}_user_card`}>
+      {/* <CardHeader className="items-center"> */}
+      <CardContent className="flex flex-row gap-5 items-center mt-3">
+        <Avatar className="w-40 h-40 border-4 border-[#124d6a]">
+          <AvatarImage src={user.user_avatar} />
+          <AvatarFallback>{user.username}</AvatarFallback>
+        </Avatar>
+        {/* </CardHeader> */}
 
-        <div>
-          {user.interest_hashtags &&
-            user.interest_hashtags.map((tag: TagType) => (
-              <Tag key={`${user.user_id}${tag}`} tag={tag}></Tag>
-            ))}
+        <div
+          key={`${user.user_id}short_user_card`}
+          className="user-card-short w-full"
+        >
+          <p>
+            <span className="font-bold mr-2">Name:</span>
+            <Button variant="link">
+              <Link href={`users/extended/${user.user_id}`}>
+                {user.username}
+              </Link>
+            </Button>
+          </p>
+          <p>
+            <span className="font-bold mr-2">Gender:</span>
+            {user.gender}
+          </p>
+          <p>
+            <span className="font-bold mr-2">Year of birth: </span>
+            {user.year_of_birth}
+          </p>
+          <p>
+            <span className="font-bold mr-2">User description: </span>
+            {user.user_description}
+          </p>
+          <p>
+            <span className="font-bold mr-2">Approximate distance: </span>{" "}
+            {user.distance.toFixed(1)} km{" "}
+          </p>
+
+          <div>
+            {user.interest_hashtags &&
+              user.interest_hashtags.map((tag: TagType) => (
+                <Tag key={`${user.user_id}${tag}`} tag={tag}></Tag>
+              ))}
+          </div>
         </div>
-      </div>
-    </div>
+        <LikeButton user={user}></LikeButton>
+      </CardContent>
+    </Card>
   );
 };
 
