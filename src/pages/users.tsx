@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { z } from "zod";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
@@ -50,13 +49,20 @@ const Users = () => {
   console.log(users);
 
   return (
-    <div className="users-list">
+    <div>
       <NavWithToken />
-      <h1>All users</h1>
-      {users &&
-        users.map((user: User) => (
-          <UserCard key={`${user.user_id}_user_card`} user={user}></UserCard>
-        ))}
+      <div className="users-list">
+        <h1>All users</h1>
+        {users &&
+          users
+            .sort((a, b) => a.distance - b.distance)
+            .map((user: User) => (
+              <UserCard
+                key={`${user.user_id}_user_card`}
+                user={user}
+              ></UserCard>
+            ))}
+      </div>
     </div>
   );
 };
