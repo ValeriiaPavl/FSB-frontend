@@ -33,7 +33,7 @@ const ShortUserCard = ({ user }: shortUserCardProps) => {
           <div className="user-info">
             <p>
               <span className="font-bold mr-2">Name:</span>
-              <Link href={`${frontendUrl}/users/${user.to_person_id}`}>
+              <Link href={`${frontendUrl}/users/extended/${user.to_person_id}`}>
                 {user.username}
               </Link>
             </p>
