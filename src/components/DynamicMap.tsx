@@ -60,7 +60,7 @@ const DynamicMap = ({ location, setLocation }: MapProps) => {
       {isLocationFound ? (
         <MapContainer
           className="h-80 w-full "
-          center={location}
+          center={location as L.LatLngExpression}
           zoom={13}
           scrollWheelZoom={false}
         >
@@ -68,7 +68,7 @@ const DynamicMap = ({ location, setLocation }: MapProps) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={location} icon={svgIcon}>
+          <Marker position={location as L.LatLngExpression} icon={svgIcon}>
             <Popup>You are here!</Popup>
           </Marker>
           <MapClickHandler handler={handleMapClick} />

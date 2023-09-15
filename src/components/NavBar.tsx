@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/router";
 
 interface NavWithTokenProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 const NavWithToken = (props: NavWithTokenProps) => {

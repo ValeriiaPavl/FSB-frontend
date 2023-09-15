@@ -1,7 +1,5 @@
-import { Like } from "@/lib/types";
 import { userValidator } from "@/lib/validators";
 import { z } from "zod";
-import { Button } from "./ui/button";
 import axios from "axios";
 import { useEffect, useState } from "react";
 

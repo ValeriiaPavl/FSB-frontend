@@ -92,8 +92,12 @@ const EditProfile = () => {
           user_description: data.user_description,
           year_of_birth: data.year_of_birth,
           gender: data.gender,
-          city_of_residence_latitude: parseFloat(location[0].toFixed(6)),
-          city_of_residence_longitude: parseFloat(location[1].toFixed(6)),
+          city_of_residence_latitude: parseFloat(
+            location ? location[0].toFixed(6) : "0"
+          ),
+          city_of_residence_longitude: parseFloat(
+            location ? location[1].toFixed(6) : "0"
+          ),
           user_avatar: imageUrl,
         },
       });
