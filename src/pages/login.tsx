@@ -3,8 +3,19 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/router";
-import NavBar from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import NavWithToken from "@/components/NavBar";
 
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
@@ -17,11 +28,9 @@ type userFromForm = z.infer<typeof userFromFormValidator>;
 
 const UserLogin = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<userFromForm>({ resolver: zodResolver(userFromFormValidator) });
+  const form = useForm<userFromForm>({
+    resolver: zodResolver(userFromFormValidator),
+  });
 
   const handleFormSubmit = (data: userFromForm) => {
     console.log(data.username, data.password);
@@ -41,25 +50,60 @@ const UserLogin = () => {
   };
 
   return (
-    <main>
-      <NavBar />
-      <h1>User login page</h1>
-      <form className="flex flex-col" onSubmit={handleSubmit(handleFormSubmit)}>
-        <label htmlFor="username"> Enter your username</label>
-        <input id="username" {...register("username")}></input>
-        {errors.username && (
-          <p className="error-msg">{errors.username.message}</p>
-        )}
-
-        <label htmlFor="password">Enter your password</label>
-        <input id="password" {...register("password")}></input>
-        {errors.password && (
-          <p className="error-msg">{errors.password.message}</p>
-        )}
-
-        <Button type="submit">Submit</Button>
-      </form>
-    </main>
+    <div>
+      <NavWithToken />
+      <main className="flex flex-row justify-center">
+        <div className="flex flex-col content-center">
+          <Card className="md:w-full gap-4 pt-2 flex-row justify-center px-40">
+            <CardHeader>
+              <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                Login page
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-column content-center">
+              <Form {...form}>
+                <form
+                  className="space-y-6"
+                  onSubmit={form.handleSubmit(handleFormSubmit)}
+                >
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input placeholder="username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="password"
+                            type="password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <Button type="submit">Submit</Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
   );
 };
 
