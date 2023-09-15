@@ -1,6 +1,7 @@
 import { useState, useEffect, ReactEventHandler, SetStateAction } from "react";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+
 import { z } from "zod";
 
 interface MapProps {
@@ -17,8 +18,19 @@ import {
   useMapEvents,
 } from "react-leaflet";
 
+const svgIcon = L.divIcon({
+  html: `
+  <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="red" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+</svg>
+`,
+
+  className: "",
+  iconSize: [40, 40],
+  iconAnchor: [12, 40],
+});
+
 const DynamicMap = ({ location, setLocation }: MapProps) => {
-  // const [location, setLocation] = useState([51.505, -0.09]); // Default to some location
   const [isLocationFound, setIsLocationFound] = useState(false);
 
   useEffect(() => {
@@ -44,10 +56,10 @@ const DynamicMap = ({ location, setLocation }: MapProps) => {
   };
 
   return (
-    <div className="w-full h-[400px]">
+    <div className=" border-2 border-zinc-300 ">
       {isLocationFound ? (
         <MapContainer
-          className="h-80 w-full"
+          className="h-80 w-full "
           center={location}
           zoom={13}
           scrollWheelZoom={false}
@@ -56,7 +68,7 @@ const DynamicMap = ({ location, setLocation }: MapProps) => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <Marker position={location}>
+          <Marker position={location} icon={svgIcon}>
             <Popup>You are here!</Popup>
           </Marker>
           <MapClickHandler handler={handleMapClick} />
