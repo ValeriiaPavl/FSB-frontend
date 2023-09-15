@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
+import { User } from "@/lib/types";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/router";
 
 interface NavWithTokenProps {
   children: ReactNode;
@@ -8,6 +12,11 @@ interface NavWithTokenProps {
 
 const NavWithToken = (props: NavWithTokenProps) => {
   const [checked, setChecked] = useState<"noToken" | "hasToken">("noToken");
+  const [token, setToken] = useState<String | null>(null);
+  const [userIdFromToken, setUserId] = useState<number | null>(null);
+  const [currUser, setCurrUser] = useState<User | null>(null);
+  const router = useRouter();
+
   useEffect(() => {
     const tokenFromLs = localStorage.getItem("token");
     if (!tokenFromLs) {
@@ -17,9 +26,49 @@ const NavWithToken = (props: NavWithTokenProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      const getId = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/id_from_token`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          await setUserId(response.data.user_id);
+        } catch (error) {
+          console.log("Something went wrong");
+        }
+      };
+      getId();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (userIdFromToken) {
+      const getCurrUser = async () => {
+        try {
+          console.log("getting image");
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/extended/${userIdFromToken}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          await setCurrUser(response.data);
+        } catch (error) {
+          console.log("Something went wrong");
+        }
+      };
+      getCurrUser();
+    }
+  }, [userIdFromToken, token]);
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     setChecked("noToken");
+    router.push("/login");
   };
 
   return (
@@ -27,10 +76,17 @@ const NavWithToken = (props: NavWithTokenProps) => {
       <nav className="nav-bar flex items-center">
         <div className="mx-auto container relative flex items-center justify-between content-center">
           <span className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            ⭐ FSB
+            ⭐ FSB FindSomeBuddy
           </span>
           {checked === "hasToken" ? (
             <>
+              {" "}
+              <a href={`/users/extended/${userIdFromToken}`}>
+                <Avatar className="w-20 h-20 border-4 border-wheat hover:scale-110">
+                  <AvatarImage src={currUser?.user_avatar} />
+                  <AvatarFallback>{currUser?.username}</AvatarFallback>
+                </Avatar>
+              </a>
               <Button variant="link">
                 <Link href="/users" className="text-lg font-semibold">
                   All users
