@@ -3,11 +3,33 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { useRouter } from "next/router";
-import NavBar from "@/components/NavBar";
+import NavWithToken from "@/components/NavBar";
 import { Button } from "@/components/ui/button";
 import ImgUpload from "@/components/ImgUpload";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
@@ -21,7 +43,10 @@ const userFromFormValidator = z.object({
   password: z.string().min(4),
 
   user_description: z.string(),
-  year_of_birth: z.number().gt(1920).lt(2022),
+  year_of_birth: z
+    .string()
+    .transform((val) => Number(val))
+    .pipe(z.number().gt(1920).lt(2022)),
   gender: z.union([
     z.literal("not_specified"),
     z.literal("male"),
@@ -33,11 +58,17 @@ const userFromFormValidator = z.object({
 type userFromForm = z.infer<typeof userFromFormValidator>;
 
 const RegisterProfile = () => {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<userFromForm>({ resolver: zodResolver(userFromFormValidator) });
+  const form = useForm<userFromForm>({
+    resolver: zodResolver(userFromFormValidator),
+    defaultValues: {
+      username: "",
+      email: "",
+      password: "",
+      user_description: "",
+      year_of_birth: 1921,
+      gender: "not_specified",
+    },
+  });
 
   const router = useRouter();
   const [location, setLocation] = useState<number[] | null>(null);
@@ -63,7 +94,7 @@ const RegisterProfile = () => {
           user_avatar: imageUrl,
         },
       });
-      router.push("/users");
+      router.push("/login");
     };
     postUser();
   };
@@ -73,14 +104,13 @@ const RegisterProfile = () => {
     setImageUrl(url);
   };
 
-  const onMapClick = (location: number[]) => {
-    console.log("I am here");
-    setLocation(location);
-  };
+  // const onMapClick = (location: number[]) => {
+  //   console.log("I am here");
+  //   setLocation(location);
+  // };
 
   useEffect(() => {
     if (location) {
-      // Handle the clicked location here
       console.log(
         `Location clicked in parent: Latitude ${location}, Longitude ${location}`
       );
@@ -88,58 +118,137 @@ const RegisterProfile = () => {
   }, [location]);
 
   return (
-    <main>
-      <NavBar />
-      <h1>Create profile page</h1>
-      <form className="flex flex-col" onSubmit={handleSubmit(handleFormSubmit)}>
-        <label htmlFor="username"> Enter your username</label>
-        <input id="username" {...register("username")}></input>
-        {errors.username && (
-          <p className="error-msg">{errors.username.message}</p>
-        )}
-        <label htmlFor="password"> Enter your password</label>
-        <input id="password" {...register("password")}></input>
-        {errors.password && (
-          <p className="error-msg">{errors.password.message}</p>
-        )}
-        <label htmlFor="email"> Enter your email</label>
-        <input id="email" {...register("email")}></input>
-        {errors.email && <p className="error-msg">{errors.email.message}</p>}
+    <div>
+      <NavWithToken />
+      <main className="flex flex-row justify-center">
+        <div className="flex flex-col content-center">
+          <Card className="md:w-full gap-4 pt-2 flex-row justify-center px-40">
+            <CardHeader>
+              <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+                Registration page
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-column content-center">
+              <Form {...form}>
+                <form
+                  className="space-y-6"
+                  onSubmit={form.handleSubmit(handleFormSubmit)}
+                >
+                  <FormField
+                    control={form.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input placeholder="username" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Your email</FormLabel>
+                        <FormControl>
+                          <Input placeholder="email" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="user_description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Your bio</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Tell about yourself"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem className="z-50 relative mb-20">
+                        <FormLabel>Your gender</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Choose your gender" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent className="relative z-10">
+                            <SelectItem value="male">Male</SelectItem>
+                            <SelectItem value="female">Female</SelectItem>
+                            <SelectItem value="different">Different</SelectItem>
+                            <SelectItem value="not_specified">
+                              Not specified
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="year_of_birth"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Your year of birth</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="1921" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
-        <label htmlFor="user_description">Enter your bio</label>
-        <textarea
-          id="user_description"
-          {...register("user_description")}
-        ></textarea>
-        {errors.user_description && (
-          <p className="error-msg">{errors.user_description.message}</p>
-        )}
+                  <ImgUpload onImageUpload={onImageUpload}></ImgUpload>
 
-        <label htmlFor="year_of_birth">Enter your year of birth</label>
-        <input
-          type="number"
-          id="year_of_birth"
-          {...register("year_of_birth", { valueAsNumber: true })}
-        ></input>
-        {errors.year_of_birth && (
-          <p className="error-msg">{errors.year_of_birth.message}</p>
-        )}
-
-        <label htmlFor="gender">Your gender</label>
-        <select id="gender" {...register("gender")}>
-          <option>male</option>
-          <option>female</option>
-          <option>different</option>
-          <option>not_specified</option>
-        </select>
-        {errors.gender && <p className="error-msg">{errors.gender.message}</p>}
-
-        <ImgUpload onImageUpload={onImageUpload}></ImgUpload>
-
-        <DynamicMap location={location} setLocation={setLocation}></DynamicMap>
-        <Button type="submit">Submit</Button>
-      </form>
-    </main>
+                  <DynamicMap
+                    location={location}
+                    setLocation={setLocation}
+                  ></DynamicMap>
+                  <Button type="submit">Submit</Button>
+                </form>
+              </Form>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    </div>
   );
 };
 
