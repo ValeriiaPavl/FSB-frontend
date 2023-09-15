@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
+import WithToken from "@/components/WithToken";
 
 const UserPage = () => {
   const router = useRouter();
@@ -17,7 +18,6 @@ const UserPage = () => {
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
-    console.log(token);
   }, []);
 
   useEffect(() => {

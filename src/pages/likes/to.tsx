@@ -1,11 +1,14 @@
 import ShortUsersList from "@/components/ShortUsersList";
 import NavWithToken from "@/components/NavBar";
+import WithToken from "@/components/WithToken";
 
 const ToLikesPage = () => {
   return (
     <div>
       <NavWithToken />
-      <ShortUsersList linkToUsers="likes/to" header="Who liked you" />;
+      <WithToken>
+        <ShortUsersList linkToUsers="likes/to" header="Who liked you" />;
+      </WithToken>
     </div>
   );
 };
