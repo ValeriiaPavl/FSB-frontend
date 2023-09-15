@@ -8,14 +8,41 @@ import NavWithToken from "@/components/NavBar";
 
 const UserPage = () => {
   const router = useRouter();
-  const { user_id } = router.query;
+  console.log("router query =", router.query);
+  const user_id: number = parseInt(router.query.user_id as string);
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<String | null>(null);
+  const [userIdFromToken, setUserId] = useState<number | null>(null);
+  const [isMe, setIsMe] = useState<boolean>(false);
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     console.log(token);
   }, []);
+
+  useEffect(() => {
+    if (token) {
+      const getId = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/id_from_token`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setUserId(response.data.user_id);
+        } catch (error) {
+          console.log("Something went wrong");
+        }
+      };
+      getId();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    console.log("third effect", user_id, userIdFromToken);
+    if (user_id === userIdFromToken) {
+      setIsMe(true);
+    }
+  }, [user_id, userIdFromToken]);
 
   useEffect(() => {
     if (user_id) {
@@ -39,13 +66,17 @@ const UserPage = () => {
         getUser();
       }
     }
-  }, [user_id]);
+  }, [user_id, token]);
 
   if (user) {
     return (
       <main>
         <NavWithToken />
-        <UserCard user={user} />;
+        <WithToken>
+          <div className="flex flex-row justify-center">
+            <UserCard isMe={isMe} user={user} />
+          </div>
+        </WithToken>
       </main>
     );
   } else {
