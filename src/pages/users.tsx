@@ -5,19 +5,19 @@ import NavWithToken from "@/components/NavBar";
 import { userArrayValidator } from "@/lib/validators";
 import { User } from "@/lib/types";
 import { CardTitle } from "@/components/ui/card";
+import WithToken from "@/components/WithToken";
 
 const Users = () => {
   const [users, setUsers] = useState<User[] | null>(null);
   const [token, setToken] = useState<String | null>(null);
-
+  const isMe = false;
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     console.log(token);
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const getUsers = async () => {
-      console.log("hello");
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/extended`,
@@ -38,7 +38,9 @@ const Users = () => {
         console.log(error);
       }
     };
-    getUsers();
+    if (token) {
+      getUsers();
+    }
   }, [token]);
 
   console.log(users);
@@ -46,23 +48,26 @@ const Users = () => {
   return (
     <div>
       <NavWithToken />
-      <div className="flex flex-row justify-center">
-        <div className="users-list md:w-2/3">
-          <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
-            All users
-          </CardTitle>
+      <WithToken>
+        <div className="flex flex-row justify-center">
+          <div className="users-list md:w-2/3">
+            <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
+              All users
+            </CardTitle>
 
-          {users &&
-            users
-              .sort((a, b) => a.distance - b.distance)
-              .map((user: User) => (
-                <UserCard
-                  key={`${user.user_id}_user_card`}
-                  user={user}
-                ></UserCard>
-              ))}
+            {users &&
+              users
+                .sort((a, b) => a.distance - b.distance)
+                .map((user: User) => (
+                  <UserCard
+                    isMe={isMe}
+                    key={`${user.user_id}_user_card`}
+                    user={user}
+                  ></UserCard>
+                ))}
+          </div>
         </div>
-      </div>
+      </WithToken>
     </div>
   );
 };
