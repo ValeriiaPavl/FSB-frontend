@@ -1,4 +1,6 @@
 import axios from "axios";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const API_KEY = process.env.NEXT_PUBLIC_REACT_FILESTACK_API_KEY;
 
@@ -26,15 +28,15 @@ const ImgUpload = ({
   };
 
   return (
-    <>
-      <h1>Upload an image</h1>
-      <input
+    <div className=" mb-10 grid w-full max-w-sm items-center gap-1.5">
+      <Label>Upload an image</Label>
+      <Input
         type="file"
         name="imageToUpload"
         id="img-uploader"
         onChange={handleFileUpload}
       />
-    </>
+    </div>
   );
 };
 
