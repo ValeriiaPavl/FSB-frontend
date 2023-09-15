@@ -80,7 +80,7 @@ const UserPage = () => {
       </main>
     );
   } else {
-    <h1>Doesn't work this way</h1>;
+    <h1>{"Doesn't work this way"}</h1>;
   }
 };
 
