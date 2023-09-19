@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import ImgUpload from "@/components/ImgUpload";
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import { User } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
@@ -40,8 +41,8 @@ const DynamicMap = dynamic(() => import("@/components/DynamicMap"), {
 
 const userFromFormValidator = z.object({
   username: z.string().max(100),
-  email: z.string().email(),
-  password: z.string().min(4),
+  email: z.string().email().optional(),
+  password: z.string().min(4).optional(),
 
   user_description: z.string(),
   year_of_birth: z
@@ -58,29 +59,27 @@ const userFromFormValidator = z.object({
 
 type userFromForm = z.infer<typeof userFromFormValidator>;
 
-const EditProfile = () => {
+interface UserFormValuesProps {
+  preloadedValues: userFromForm;
+}
+
+const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
   const form = useForm<userFromForm>({
     resolver: zodResolver(userFromFormValidator),
     defaultValues: {
-      username: "",
-      email: "",
-      password: "",
-      user_description: "",
-      year_of_birth: 1921,
-      gender: "not_specified",
+      username: preloadedValues.username,
+      email: preloadedValues.email,
+      password: preloadedValues.password,
+      user_description: preloadedValues.user_description,
+      year_of_birth: preloadedValues.year_of_birth,
+      gender: preloadedValues.gender,
     },
   });
-
   const router = useRouter();
   const [location, setLocation] = useState<number[] | null>(null);
-
   const [imageUrl, setImageUrl] = useState<string>("");
 
   const handleFormSubmit = (data: userFromForm) => {
-    const getUser = async () => {
-      const response = await axios.get(`${backendUrl}/users/extended/`);
-    };
-
     const postUser = async () => {
       const response = await axios.post(`${backendUrl}/users`, {
         user: {
@@ -111,22 +110,8 @@ const EditProfile = () => {
     setImageUrl(url);
   };
 
-  // const onMapClick = (location: number[]) => {
-  //   console.log("I am here");
-  //   setLocation(location);
-  // };
-
-  useEffect(() => {
-    if (location) {
-      console.log(
-        `Location clicked in parent: Latitude ${location}, Longitude ${location}`
-      );
-    }
-  }, [location]);
-
   return (
     <div>
-      <NavWithToken />
       <WithToken>
         <main className="flex flex-row justify-center">
           <div className="flex flex-col content-center">
@@ -248,9 +233,22 @@ const EditProfile = () => {
                         </FormItem>
                       )}
                     />
-
-                    <ImgUpload onImageUpload={onImageUpload}></ImgUpload>
-
+                    <FormField
+                      control={form.control}
+                      name="imageUrl"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel></FormLabel>
+                          <FormControl>
+                            <ImgUpload
+                              onImageUpload={onImageUpload}
+                              {...field}
+                            ></ImgUpload>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <DynamicMap
                       location={location}
                       setLocation={setLocation}
@@ -264,6 +262,47 @@ const EditProfile = () => {
         </main>
       </WithToken>
     </div>
+  );
+};
+
+const EditProfile = () => {
+  const [userData, setUserData] = useState<User | null>(null);
+  const [token, setToken] = useState<String | null>(null);
+
+  // get token
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
+  // get info about user
+  useEffect(() => {
+    if (token) {
+      const getCurrUser = async () => {
+        try {
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/your_profile`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          setUserData(response.data);
+        } catch (error) {
+          console.log("Something went wrong");
+        }
+      };
+      getCurrUser();
+    }
+  }, [token]);
+
+  console.log(userData);
+
+  return (
+    <main>
+      <NavWithToken />
+      {userData !== null ? (
+        <UserForm preloadedValues={userData} />
+      ) : (
+        <p>data is null</p>
+      )}
+    </main>
   );
 };
 
