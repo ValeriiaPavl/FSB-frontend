@@ -43,12 +43,16 @@ const userFromFormValidator = z.object({
   username: z.string().max(100),
   email: z.string().email().optional(),
   password: z.string().min(4).optional(),
+  city_of_residence_latitude: z.string().transform((val) => Number(val)),
+  city_of_residence_longitude: z.string().transform((val) => Number(val)),
 
   user_description: z.string(),
-  year_of_birth: z
-    .string()
-    .transform((val) => Number(val))
-    .pipe(z.number().gt(1920).lt(2022)),
+  user_avatar: z.string().url(),
+  // year_of_birth: z
+  //   .string()
+  //   .transform((val) => Number(val))
+  //   .pipe(z.number().gt(1920).lt(2022)),
+  year_of_birth: z.number().gt(1920).lt(2022),
   gender: z.union([
     z.literal("not_specified"),
     z.literal("male"),
@@ -69,23 +73,30 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
     defaultValues: {
       username: preloadedValues.username,
       email: preloadedValues.email,
-      password: preloadedValues.password,
+      // password: preloadedValues.password,
       user_description: preloadedValues.user_description,
       year_of_birth: preloadedValues.year_of_birth,
       gender: preloadedValues.gender,
+      user_avatar: preloadedValues.user_avatar,
+      city_of_residence_latitude: preloadedValues.city_of_residence_latitude,
+      city_of_residence_longitude: preloadedValues.city_of_residence_longitude,
     },
   });
   const router = useRouter();
-  const [location, setLocation] = useState<number[] | null>(null);
+  const [location, setLocation] = useState<number[] | null>([
+    preloadedValues.city_of_residence_latitude,
+    preloadedValues.city_of_residence_longitude,
+  ]);
   const [imageUrl, setImageUrl] = useState<string>("");
+  // console.log(preloadedValues);
 
   const handleFormSubmit = (data: userFromForm) => {
-    const postUser = async () => {
-      const response = await axios.post(`${backendUrl}/users`, {
+    const patchUser = async () => {
+      console.log(data);
+      const response = await axios.patch(`${backendUrl}/your_profile`, {
         user: {
           username: data.username,
           email: data.email,
-          password: data.password,
         },
         profile: {
           user_description: data.user_description,
@@ -102,7 +113,7 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
       });
       router.push("/login");
     };
-    postUser();
+    patchUser();
   };
 
   const onImageUpload = (url: string) => {
@@ -140,7 +151,7 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
                         </FormItem>
                       )}
                     />
-                    <FormField
+                    {/* <FormField
                       control={form.control}
                       name="password"
                       render={({ field }) => (
@@ -156,7 +167,7 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                     <FormField
                       control={form.control}
                       name="email"
@@ -225,17 +236,22 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
                           <FormControl>
                             <Input
                               type="number"
+                              min={1921}
+                              max={2020}
                               placeholder="1921"
                               {...field}
+                              onChange={(event) =>
+                                field.onChange(+event.target.value)
+                              }
                             />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
-                    <FormField
+                    {/* <FormField
                       control={form.control}
-                      name="imageUrl"
+                      name="user_avatar"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel></FormLabel>
@@ -248,7 +264,7 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
                           <FormMessage />
                         </FormItem>
                       )}
-                    />
+                    /> */}
                     <DynamicMap
                       location={location}
                       setLocation={setLocation}
@@ -292,7 +308,7 @@ const EditProfile = () => {
     }
   }, [token]);
 
-  console.log(userData);
+  // console.log(userData);
 
   return (
     <main>
