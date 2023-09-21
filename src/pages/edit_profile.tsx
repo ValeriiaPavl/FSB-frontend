@@ -47,7 +47,6 @@ const userFromFormValidator = z.object({
   city_of_residence_longitude: z.string().transform((val) => Number(val)),
 
   user_description: z.string(),
-  user_avatar: z.string().url(),
   // year_of_birth: z
   //   .string()
   //   .transform((val) => Number(val))
@@ -68,16 +67,21 @@ interface UserFormValuesProps {
 }
 
 const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
+  const [token, setToken] = useState<String | null>(null);
+
+  // get token
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, []);
+
   const form = useForm<userFromForm>({
     resolver: zodResolver(userFromFormValidator),
     defaultValues: {
       username: preloadedValues.username,
       email: preloadedValues.email,
-      // password: preloadedValues.password,
       user_description: preloadedValues.user_description,
       year_of_birth: preloadedValues.year_of_birth,
       gender: preloadedValues.gender,
-      user_avatar: preloadedValues.user_avatar,
       city_of_residence_latitude: preloadedValues.city_of_residence_latitude,
       city_of_residence_longitude: preloadedValues.city_of_residence_longitude,
     },
@@ -91,29 +95,49 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
   // console.log(preloadedValues);
 
   const handleFormSubmit = (data: userFromForm) => {
-    const patchUser = async () => {
-      console.log(data);
-      const response = await axios.patch(`${backendUrl}/your_profile`, {
-        user: {
-          username: data.username,
-          email: data.email,
-        },
-        profile: {
-          user_description: data.user_description,
-          year_of_birth: data.year_of_birth,
-          gender: data.gender,
-          city_of_residence_latitude: parseFloat(
-            location ? location[0].toFixed(6) : "0"
-          ),
-          city_of_residence_longitude: parseFloat(
-            location ? location[1].toFixed(6) : "0"
-          ),
-          user_avatar: imageUrl,
-        },
-      });
-      router.push("/login");
-    };
-    patchUser();
+    if (token) {
+      console.log(token);
+      const patchUser = async () => {
+        console.log(data);
+        try {
+          const response = await axios.patch(
+            `${backendUrl}/your_profile`,
+            {
+              user: {
+                username: data.username,
+                email: data.email,
+              },
+              profile: {
+                user_description: data.user_description,
+                year_of_birth: data.year_of_birth,
+                gender: data.gender,
+                city_of_residence_latitude: parseFloat(
+                  location ? location[0].toFixed(6) : "0"
+                ),
+                city_of_residence_longitude: parseFloat(
+                  location ? location[1].toFixed(6) : "0"
+                ),
+              },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.status === 200) {
+            router.push("/");
+          } else {
+            console.error("Unexpected response status", response.status);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+      patchUser();
+    } else {
+      console.log("doesn't work");
+    }
   };
 
   const onImageUpload = (url: string) => {
@@ -282,7 +306,7 @@ const UserForm = ({ preloadedValues }: UserFormValuesProps) => {
 };
 
 const EditProfile = () => {
-  const [userData, setUserData] = useState<User | null>(null);
+  const [userData, setUserData] = useState<userFromForm | null>(null);
   const [token, setToken] = useState<String | null>(null);
 
   // get token
