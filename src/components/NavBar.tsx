@@ -72,9 +72,9 @@ const NavWithToken = (props: NavWithTokenProps) => {
   };
 
   return (
-    <div className="sticky top-0 z-10">
-      <nav className="nav-bar flex items-center">
-        <div className="mx-auto container relative flex items-center justify-between content-center">
+    <div className="flex sticky top-0 z-10">
+      <nav className="flex-grow text-[#f5deb3] bg-[#124d6a]">
+        <div className="px-2 py-2 relative flex items-center justify-between content-center w-full flex-wrap">
           <span className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
             ⭐ FSB FindSomeBuddy
           </span>
@@ -82,28 +82,40 @@ const NavWithToken = (props: NavWithTokenProps) => {
             <>
               {" "}
               <a href={`/users/extended/${userIdFromToken}`}>
-                <Avatar className="w-20 h-20 border-4 border-wheat hover:scale-110">
+                <Avatar className="w-20 h-20 border-4 border-[#f5deb3] hover:scale-110">
                   <AvatarImage src={currUser?.user_avatar} />
                   <AvatarFallback>{currUser?.username}</AvatarFallback>
                 </Avatar>
               </a>
               <Button variant="link">
-                <Link href="/users" className="text-lg font-semibold">
+                <Link
+                  href="/users"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
                   All users
                 </Link>
               </Button>
               <Button variant="link">
-                <Link href="/likes/from" className="text-lg font-semibold">
-                  Likes from you
+                <Link
+                  href="/likes/from"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
+                  <p>Likes from you</p>
                 </Link>
               </Button>
               <Button variant="link">
-                <Link href="/likes/to" className="text-lg font-semibold">
+                <Link
+                  href="/likes/to"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
                   Who liked you
                 </Link>
               </Button>
               <Button variant="link">
-                <Link href="/likes/mutual" className="text-lg font-semibold">
+                <Link
+                  href="/likes/mutual"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
                   Mutual likes
                 </Link>
               </Button>
@@ -114,10 +126,20 @@ const NavWithToken = (props: NavWithTokenProps) => {
           ) : (
             <>
               <Button variant="link">
-                <Link href="/login">Login</Link>
+                <Link
+                  href="/login"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
+                  Login
+                </Link>
               </Button>
               <Button variant="link">
-                <Link href="/register">Register</Link>
+                <Link
+                  href="/register"
+                  className="text-lg font-semibold text-[#f5deb3]"
+                >
+                  Register
+                </Link>
               </Button>
             </>
           )}
