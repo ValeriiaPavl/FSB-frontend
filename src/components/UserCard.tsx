@@ -51,7 +51,7 @@ const UserCard = ({ user, isMe }: UserCardProps) => {
   return isMe ? (
     <Card key={`${user.user_id}_user_card`}>
       {/* <CardHeader className="items-center"> */}
-      <CardContent className="flex flex-row gap-5 items-center mt-3">
+      <CardContent className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-center mt-3">
         <Avatar className="w-40 h-40 border-4 border-[#124d6a]">
           <AvatarImage src={user.user_avatar} />
           <AvatarFallback>{user.username}</AvatarFallback>
@@ -97,7 +97,7 @@ const UserCard = ({ user, isMe }: UserCardProps) => {
   ) : (
     <Card key={`${user.user_id}_user_card`}>
       {/* <CardHeader className="items-center"> */}
-      <CardContent className="flex flex-row gap-5 items-center mt-3">
+      <CardContent className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-center mt-3">
         <Avatar className="w-40 h-40 border-4 border-[#124d6a]">
           <AvatarImage src={user.user_avatar} />
           <AvatarFallback>{user.username}</AvatarFallback>

@@ -54,7 +54,7 @@ const UserLogin = () => {
       <NavWithToken />
       <main className="flex flex-row justify-center">
         <div className="flex flex-col content-center">
-          <Card className="md:w-full gap-4 pt-2 flex-row justify-center px-40">
+          <Card className="w-full gap-4 pt-2 flex-row justify-center px-20">
             <CardHeader>
               <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                 Login page

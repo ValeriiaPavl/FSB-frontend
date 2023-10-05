@@ -72,8 +72,8 @@ const NavWithToken = (props: NavWithTokenProps) => {
   };
 
   return (
-    <div className="flex sticky top-0 z-10">
-      <nav className="flex-grow text-[#f5deb3] bg-[#124d6a]">
+    <div className="flex sticky top-0 z-10 h-40 items-stretch">
+      <nav className="flex flex-grow text-[#f5deb3] bg-[#124d6a] items-center">
         <div className="px-2 py-2 relative flex items-center justify-between content-center w-full flex-wrap">
           <span className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
             ⭐ FSB FindSomeBuddy
