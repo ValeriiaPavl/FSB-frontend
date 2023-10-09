@@ -71,10 +71,9 @@ const MenuList = () => {
   };
 
   return (
-    <ul className="text-lg font-semibold text-blue">
+    <ul className="text-lg font-semibold lg:flex lg:gap-3 lg:gap-y-8">
       {isToken ? (
         <>
-          {" "}
           <li>
             <Button variant="link">
               <Link
@@ -126,9 +125,9 @@ const MenuList = () => {
               </Link>
             </Button>
           </li>
-          <li className="mt-4 ml-4">
+          <li className="ml-4 ">
             <Button variant="destructive" onClick={handleLogout}>
-              Log Out
+              <p>Log Out</p>
             </Button>
           </li>
         </>
@@ -166,11 +165,11 @@ const NavWithToken = (props: NavWithTokenProps) => {
   return (
     <div className="flex sticky top-0 z-10 h-1/6 items-stretch">
       <nav className="flex flex-grow text-[#f5deb3] bg-[#124d6a] items-center">
-        <div className="px-2 py-2 relative flex items-center justify-between content-center w-full flex-wrap">
-          <span className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+        <div className="px-2 py-2 relative flex flex-col items-center justify-start content-center w-full flex-wrap">
+          <p className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl lg:mb-8">
             ⭐ FSB FindSomeBuddy
-          </span>
-          <section className="MOBILE-MENU flex lg:hidden mt-4 mb-4">
+          </p>
+          <section className="MOBILE-MENU flex flex-col lg:hidden mt-4 mb-4">
             <div
               className="HAMBURGER-ICON space-y-2"
               onClick={() => setIsNavOpen((prev) => !prev)}
@@ -182,7 +181,7 @@ const NavWithToken = (props: NavWithTokenProps) => {
 
             <div className={isNavOpen ? "showMenuNav" : "hideMenuNav"}>
               <div
-                className="absolute top-0 right-0 px-4 py-4 text-[#f5deb3]"
+                className="absolute top-0 right-0 px-4 pt-4 pb-0 text-[#f5deb3]"
                 onClick={() => setIsNavOpen(false)}
               >
                 <svg
@@ -216,7 +215,7 @@ const NavWithToken = (props: NavWithTokenProps) => {
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 5px;
         position: absolute;
-        width: 50%;
+        width: auto;
         height: 35vh;
         top: 105%;
         left: 5;
