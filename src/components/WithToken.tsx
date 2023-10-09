@@ -32,7 +32,7 @@ const WithToken = (props: WithTokenProps) => {
       <div className="flex justify-center">
         <Card className=" flex mt-5  w-1/2 justify-center items-center">
           <CardContent className="flex mt-5">
-            <span className="">
+            <span className="text-lg text-center">
               You are not logged in. Please{" "}
               <Link href="/login">
                 <b>Log in</b>
