@@ -21,9 +21,9 @@ const frontendUrl = process.env.NEXT_PUBLIC_REACT_APP_FRONTEND_URL;
 
 const ShortUserCard = ({ user }: shortUserCardProps) => {
   return (
-    <Card>
+    <Card className="flex flex-col">
       <CardHeader className="items-center">
-        <Avatar className="w-32 h-32 border-4 border-[#124d6a]">
+        <Avatar className="w-20 h-20 border-4 border-[#124d6a]">
           <AvatarImage src={user.user_avatar} />
           <AvatarFallback>{user.username}</AvatarFallback>
         </Avatar>

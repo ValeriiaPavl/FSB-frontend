@@ -210,13 +210,14 @@ const NavWithToken = (props: NavWithTokenProps) => {
         display: none;
       }
       .showMenuNav {
-        display: block;
+        padding-bottom: 1rem;
+        display: flex;
         border: solid 1px light-grey;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
         border-radius: 5px;
         position: absolute;
         width: auto;
-        height: 35vh;
+        // height: 35vh;
         top: 105%;
         left: 5;
         background: #124d6a;

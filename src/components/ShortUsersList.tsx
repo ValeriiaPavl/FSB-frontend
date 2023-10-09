@@ -57,17 +57,17 @@ const ShortUsersList = ({ linkToUsers, header }: shortUserListProps) => {
   console.log(users);
 
   return (
-    <div className="flex flex-row justify-center">
+    <div className="flex flex-row justify-center px-3 py-3">
       <main className="flex flex-col content-center">
-        <Card className="flex flex-row justify-center">
+        <Card className="flex flex-col justify-center justify-items-center">
           <div>
             <CardHeader>
               <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                 {header}
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex flex-column content-center">
-              <div className="w-auto grid grid-cols-3 gap-4 pt-2">
+            <CardContent className="flex flex-col content-center">
+              <div className="w-auto flex flex-wrap md:flex-wrap items-center justify-center lg:flex-wrap gap-4 pt-2">
                 {users &&
                   users.map((user: shortUser) => (
                     <ShortUserCard

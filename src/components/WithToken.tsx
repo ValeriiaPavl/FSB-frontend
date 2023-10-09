@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ReactNode, useEffect, useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
 
 type checkState = "checking" | "hasToken" | "noToken";
 
@@ -28,10 +29,18 @@ const WithToken = (props: WithTokenProps) => {
 
   if (checked === "noToken") {
     return (
-      <div>
-        <p>
-          You are not logged in. Please <Link href="/login">Log in</Link>.
-        </p>
+      <div className="flex justify-center">
+        <Card className=" flex mt-5  w-1/2 justify-center items-center">
+          <CardContent className="flex mt-5">
+            <span className="">
+              You are not logged in. Please{" "}
+              <Link href="/login">
+                <b>Log in</b>
+              </Link>
+              .
+            </span>
+          </CardContent>
+        </Card>
       </div>
     );
   }
