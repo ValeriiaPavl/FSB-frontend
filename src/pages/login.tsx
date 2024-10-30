@@ -44,6 +44,7 @@ const UserLogin = () => {
         password: data.password,
       });
       localStorage.setItem("token", response.data.token);
+      console.log(response.data.token);
       router.push("/users");
     };
     postUser();

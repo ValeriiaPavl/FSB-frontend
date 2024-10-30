@@ -3,9 +3,11 @@ import { userValidator } from "@/lib/validators";
 import { User } from "@/lib/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Card } from "@/components/ui/card";
 import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
 import WithToken from "@/components/WithToken";
+import InterestButton from "@/components/InterestButton";
 
 const UserPage = () => {
   const router = useRouter();
@@ -15,6 +17,9 @@ const UserPage = () => {
   const [token, setToken] = useState<String | null>(null);
   const [userIdFromToken, setUserId] = useState<number | null>(null);
   const [isMe, setIsMe] = useState<boolean>(false);
+  const [interestNumberCount, setInterestNumberCount] = useState<number>(
+    user?.interest_hashtags.length ?? 0
+  );
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -46,7 +51,10 @@ const UserPage = () => {
 
   useEffect(() => {
     if (user_id) {
-      if (token !== null) {
+      if (
+        token !== null ||
+        interestNumberCount != user?.interest_hashtags.length
+      ) {
         const getUser = async () => {
           try {
             const response = await axios.get(
@@ -66,7 +74,7 @@ const UserPage = () => {
         getUser();
       }
     }
-  }, [user_id, token]);
+  }, [user_id, token, interestNumberCount, user?.interest_hashtags]);
 
   if (user) {
     return (
@@ -74,7 +82,15 @@ const UserPage = () => {
         <NavWithToken />
         <WithToken>
           <div className="flex flex-row justify-center">
-            <UserCard isMe={isMe} user={user} />
+            <Card className="flex flex-col items-center">
+              <UserCard isMe={isMe} user={user} />
+              {isMe && (
+                <InterestButton
+                  interestNumberCount={interestNumberCount}
+                  setInterestNumberCount={setInterestNumberCount}
+                />
+              )}
+            </Card>
           </div>
         </WithToken>
       </main>
