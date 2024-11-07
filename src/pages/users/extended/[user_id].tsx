@@ -82,13 +82,15 @@ const UserPage = () => {
         <NavWithToken />
         <WithToken>
           <div className="flex flex-row justify-center">
-            <Card className="flex flex-col items-center">
+            <Card>
               <UserCard isMe={isMe} user={user} />
               {isMe && (
-                <InterestButton
-                  interestNumberCount={interestNumberCount}
-                  setInterestNumberCount={setInterestNumberCount}
-                />
+                <div className="flex flex-row justify-center">
+                  <InterestButton
+                    interestNumberCount={interestNumberCount}
+                    setInterestNumberCount={setInterestNumberCount}
+                  />
+                </div>
               )}
             </Card>
           </div>

@@ -4,7 +4,7 @@ import UserCard from "@/components/UserCard";
 import NavWithToken from "@/components/NavBar";
 import { userArrayValidator } from "@/lib/validators";
 import { User } from "@/lib/types";
-import { CardTitle } from "@/components/ui/card";
+import { Card, CardTitle } from "@/components/ui/card";
 import WithToken from "@/components/WithToken";
 
 const Users = () => {
@@ -59,11 +59,9 @@ const Users = () => {
               users
                 .sort((a, b) => a.distance - b.distance)
                 .map((user: User) => (
-                  <UserCard
-                    isMe={isMe}
-                    key={`${user.user_id}_user_card`}
-                    user={user}
-                  ></UserCard>
+                  <Card key={`${user.user_id}_user_card`}>
+                    <UserCard isMe={isMe} user={user}></UserCard>
+                  </Card>
                 ))}
           </div>
         </div>
