@@ -1,4 +1,4 @@
-import { userValidator } from "@/lib/validators";
+import { extendedUserValidator } from "@/lib/validators";
 import { z } from "zod";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const backendUrl = process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL;
 
 const LikeButtonPropsValidator = z.object({
-  user: userValidator,
+  user: extendedUserValidator,
 });
 
 type LikeButtonProps = z.infer<typeof LikeButtonPropsValidator>;

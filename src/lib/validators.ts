@@ -1,5 +1,6 @@
 import { z } from "zod";
-export const userValidator = z.object({
+
+export const baseUserValidator = z.object({
   username: z.string(),
   gender: z.union([
     z.literal("male"),
@@ -14,11 +15,15 @@ export const userValidator = z.object({
   user_avatar: z.string(),
   interest_hashtags: z.string().array(),
   user_id: z.number().int(),
+});
+
+export const extendedUserValidator = baseUserValidator.extend({
   distance: z.number(),
   liked: z.boolean(),
 });
 
-export const userArrayValidator = z.array(userValidator);
+export const userArrayValidator = z.array(extendedUserValidator);
+export const baseUserArrayValidator = z.array(baseUserValidator);
 
 export const shortUserLikeToValidator = z.object({
   username: z.string(),

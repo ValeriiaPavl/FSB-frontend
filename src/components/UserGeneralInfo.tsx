@@ -4,16 +4,16 @@ import Tag from "./Tag";
 import { Button } from "./ui/button";
 import { User } from "@/lib/types";
 import { z } from "zod";
-import { userValidator } from "@/lib/validators";
+import { baseUserValidator, extendedUserValidator } from "@/lib/validators";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 
 const userGeneralInfoType = z.object({
-  user: userValidator,
+  user: baseUserValidator,
 });
 
 const UserGeneralInfo = ({ user }: z.infer<typeof userGeneralInfoType>) => {
   return (
-    <div className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-center mt-3">
+    <div className="flex flex-row  rounded flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-center mt-3">
       <Avatar className="w-40 h-40 border-4 border-[#124d6a]">
         <AvatarImage src={user.user_avatar} />
         <AvatarFallback>{user.username}</AvatarFallback>

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { userValidator } from "@/lib/validators";
+import { extendedUserValidator } from "@/lib/validators";
 import { User } from "@/lib/types";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -61,7 +61,7 @@ const UserPage = () => {
               `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users/extended/${user_id}`,
               { headers: { Authorization: `Bearer ${token}` } }
             );
-            const validated = userValidator.safeParse(response.data);
+            const validated = extendedUserValidator.safeParse(response.data);
             if (validated.success) {
               setUser(validated.data);
             } else {

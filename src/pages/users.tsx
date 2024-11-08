@@ -49,7 +49,7 @@ const Users = () => {
     <div>
       <NavWithToken />
       <WithToken>
-        <div className="flex flex-row justify-center">
+        <div className="flex flex-row justify-center mt-3">
           <div className="users-list md:w-2/3">
             <CardTitle className="text-center mt-10 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
               All users

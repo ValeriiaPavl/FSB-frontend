@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { UserCardProps } from "@/lib/types";
 import UserGeneralInfo from "./UserGeneralInfo";
 
-const UserCard = ({ user, isMe, token }: UserCardProps) => {
+const UserCard = ({ user, isMe }: UserCardProps) => {
   const [placeName, setPlace] = useState<string>("");
 
   useEffect(() => {
@@ -46,9 +46,9 @@ const UserCard = ({ user, isMe, token }: UserCardProps) => {
       </div>
     </CardContent>
   ) : (
-    <CardContent className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-center mt-3">
+    <CardContent className="flex flex-row justify-between items-center">
       <UserGeneralInfo user={user} />
-      {token && <LikeButton user={user}></LikeButton>}
+      <LikeButton user={user}></LikeButton>
     </CardContent>
   );
 };
