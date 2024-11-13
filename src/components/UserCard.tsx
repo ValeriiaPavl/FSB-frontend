@@ -39,7 +39,7 @@ const UserCard = ({ user, isMe }: UserCardProps) => {
   return isMe ? (
     <CardContent className="flex flex-col">
       <div className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-start mt-3">
-        <UserGeneralInfo user={user} />
+        <UserGeneralInfo user={user} withLink />
         <Button className="py-3 mt-4">
           <Link href="/edit_profile">Edit</Link>
         </Button>
@@ -47,7 +47,7 @@ const UserCard = ({ user, isMe }: UserCardProps) => {
     </CardContent>
   ) : (
     <CardContent className="flex flex-row justify-between items-center">
-      <UserGeneralInfo user={user} />
+      <UserGeneralInfo user={user} withLink />
       <LikeButton user={user}></LikeButton>
     </CardContent>
   );

@@ -74,10 +74,16 @@ const WithToken = (props: WithTokenProps) => {
             <div className="users-list">
               {users &&
                 users.map((user: BaseUser) => (
-                  <Card key={`${user.user_id}_user_card`}>
+                  <Card key={`${user.user_id}_user_card`} className="relative">
                     <CardContent>
                       <div className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-start mt-3">
-                        <UserGeneralInfo user={user}></UserGeneralInfo>
+                        <UserGeneralInfo
+                          user={user}
+                          withLink={false}
+                        ></UserGeneralInfo>
+                        <div className="bg-red-50 rounded-lg text-red-800 absolute top-4 right-5 p-2">
+                          login to see more
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
