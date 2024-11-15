@@ -5,6 +5,7 @@ import axios from "axios";
 import { baseUserArrayValidator, userArrayValidator } from "@/lib/validators";
 import { BaseUser, User } from "@/lib/types";
 import UserGeneralInfo from "./UserGeneralInfo";
+import Loading from "./loading";
 
 type checkState = "checking" | "hasToken" | "noToken";
 
@@ -15,6 +16,7 @@ interface WithTokenProps {
 const WithToken = (props: WithTokenProps) => {
   const [checked, setChecked] = useState<checkState>("checking");
   const [users, setUsers] = useState<BaseUser[] | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const tokenFromLs = localStorage.getItem("token");
     if (!tokenFromLs) {
@@ -27,6 +29,8 @@ const WithToken = (props: WithTokenProps) => {
   useEffect(() => {
     const getUsers = async () => {
       try {
+        setIsLoading(true);
+        await new Promise((resolve) => setTimeout(resolve, 20000));
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users`
         );
@@ -39,6 +43,8 @@ const WithToken = (props: WithTokenProps) => {
         }
       } catch (error) {
         console.log(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -69,28 +75,35 @@ const WithToken = (props: WithTokenProps) => {
             </span>
           </CardContent>
         </Card>
-        <Card className=" flex mt-5  w-1/2 justify-center items-center">
-          <CardContent className="flex flex-col mt-5">
-            <div className="users-list">
-              {users &&
-                users.map((user: BaseUser) => (
-                  <Card key={`${user.user_id}_user_card`} className="relative">
-                    <CardContent>
-                      <div className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-start mt-3">
-                        <UserGeneralInfo
-                          user={user}
-                          withLink={false}
-                        ></UserGeneralInfo>
-                        <div className="bg-red-50 rounded-lg text-red-800 absolute top-4 right-5 p-2">
-                          login to see more
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <Card className=" flex mt-5  w-1/2 justify-center items-center">
+            <CardContent className="flex flex-col mt-5">
+              <div className="users-list">
+                {users &&
+                  users.map((user: BaseUser) => (
+                    <Card
+                      key={`${user.user_id}_user_card`}
+                      className="relative"
+                    >
+                      <CardContent>
+                        <div className="flex flex-row flex-wrap md:flex-nowrap lg:flex-nowrap gap-5 items-start mt-3">
+                          <UserGeneralInfo
+                            user={user}
+                            withLink={false}
+                          ></UserGeneralInfo>
+                          <div className="bg-red-50 rounded-lg text-red-800 absolute top-4 right-5 p-2">
+                            login to see more
+                          </div>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-            </div>
-          </CardContent>
-        </Card>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
       </div>
     );
   }
