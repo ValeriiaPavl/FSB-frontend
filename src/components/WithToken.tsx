@@ -30,7 +30,6 @@ const WithToken = (props: WithTokenProps) => {
     const getUsers = async () => {
       try {
         setIsLoading(true);
-        await new Promise((resolve) => setTimeout(resolve, 20000));
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_REACT_APP_BACKEND_URL}/users`
         );
